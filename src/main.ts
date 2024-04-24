@@ -30,6 +30,7 @@ export async function run(): Promise<void> {
 
     const myToken = core.getInput('GITHUB_TOKEN')
     const octokit = github.getOctokit(myToken)
+    core.info(`octokit: ${octokit}`)
     await exec.exec(
       `git config --global --add safe.directory /github/workspace`
     )
