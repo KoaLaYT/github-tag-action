@@ -1,5 +1,6 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
+import * as exec from '@actions/exec'
 
 /**
  * The main function for the action.
@@ -10,6 +11,7 @@ export async function run(): Promise<void> {
     // const ms: string = core.getInput('milliseconds')
 
     core.info(JSON.stringify(github.context))
+    exec.exec('git status')
 
     // Set outputs for other workflow steps to use
     // core.setOutput('time', new Date().toTimeString())
