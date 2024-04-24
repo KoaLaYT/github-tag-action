@@ -10,20 +10,74 @@ export async function run(): Promise<void> {
   try {
     // const ms: string = core.getInput('milliseconds')
 
-    const prBranch = github.context.payload.pull_request?.head?.ref ?? ''
-    const prBody = github.context.payload.pull_request?.body ?? ''
+    const prBranch: string =
+      github.context.payload.pull_request?.head?.ref ?? ''
+    const prBody: string = github.context.payload.pull_request?.body ?? ''
     core.info(`PR branch is ${prBranch}`)
     core.info(`PR body is ${prBody}`)
 
     const latestTag = await getLatestTag()
     core.info(`Latest tag is ${JSON.stringify(latestTag)}`)
 
+    let newTag = ''
+    if (!latestTag) {
+      newTag = 'v0.0.1'
+    } else {
+      newTag = bumpVersion({ tag: latestTag, branch: prBranch, body: prBody })
+    }
+
+    core.info(`Bump tag ${latestTag ?? '-'} to ${newTag}`)
     // Set outputs for other workflow steps to use
-    // core.setOutput('time', new Date().toTimeString())
+    core.setOutput('new_tag', newTag)
   } catch (error) {
     // Fail the workflow run if an error occurs
     if (error instanceof Error) core.setFailed(error.message)
   }
+}
+
+const bumpConfig = {
+  branch: {
+    minor: ['feat/', 'feature/'],
+    patch: ['fix/', 'hotfix/', 'bugfix/']
+  }
+}
+
+function bumpVersion({
+  tag,
+  branch,
+  body
+}: {
+  tag: string
+  branch: string
+  body: string
+}) {
+  let [major, minor, patch] = tag.slice(1).split('.')
+
+  do {
+    // body's #major take highest pirority
+    if (body.includes('#major')) {
+      major = `${Number(major) + 1}`
+      break
+    }
+
+    // branch likes feat/xxx etc...
+    if (bumpConfig.branch.minor.some(it => branch.startsWith(it))) {
+      minor = `${Number(minor) + 1}`
+      break
+    }
+
+    // branch likes fix/xxx etc...
+    if (bumpConfig.branch.patch.some(it => branch.startsWith(it))) {
+      patch = `${Number(patch) + 1}`
+      break
+    }
+
+    // strange branch name ?
+    // default to bump patch
+    patch = `${Number(patch) + 1}`
+  } while (false)
+
+  return `v${major}.${minor}.${patch}`
 }
 
 async function getLatestTag() {
@@ -35,8 +89,12 @@ async function getLatestTag() {
       return result.stdout
     }
   } catch (error) {
-    if (error instanceof Error) {
-      core.error(error.message)
+    if (
+      error instanceof Error &&
+      error.message === 'No names found, cannot describe anything'
+    ) {
+      return ''
     }
+    throw error
   }
 }

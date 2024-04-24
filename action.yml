@@ -15,9 +15,9 @@ branding:
 #   default: '1000'
 
 # Define your outputs here.
-# outputs:
-# time:
-#   description: 'Your output description here'
+outputs:
+  new_tag:
+    description: 'new tag'
 
 runs:
   using: node20
