@@ -15,10 +15,10 @@ export async function run(): Promise<void> {
     core.info(`PR branch is ${prBranch}`)
     core.info(`PR body is ${prBody}`)
 
-    const latestTag = exec.getExecOutput(
+    const latestTag = await exec.getExecOutput(
       'git describe --tags "$(git rev-list --tags --max-count=1)"'
     )
-    core.info(`Latest tag is ${latestTag}`)
+    core.info(`Latest tag is ${JSON.stringify(latestTag)}`)
 
     // Set outputs for other workflow steps to use
     // core.setOutput('time', new Date().toTimeString())
