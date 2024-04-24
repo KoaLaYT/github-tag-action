@@ -30516,7 +30516,9 @@ function bumpVersion({ tag, branch, body }) {
         // strange branch name ?
         // default to bump patch
         patch = `${Number(patch) + 1}`;
-    } while (false);
+    } while (
+    // eslint-disable-next-line no-constant-condition
+    false);
     return `v${major}.${minor}.${patch}`;
 }
 async function getLatestTag() {
@@ -30527,9 +30529,8 @@ async function getLatestTag() {
             return result.stdout;
         }
     }
-    catch (error) {
-        return '';
-    }
+    catch (error) { }
+    return '';
 }
 
 
