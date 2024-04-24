@@ -1,4 +1,4 @@
-name: 'Github Tag Bump'
+name: 'Semver Tag Bump'
 description: 'Bump tag version based on PR branch name / title on merge'
 author: 'KoaLaYT'
 
