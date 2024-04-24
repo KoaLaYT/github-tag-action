@@ -30522,22 +30522,19 @@ function bumpVersion({ tag, branch, body }) {
     return `v${major}.${minor}.${patch}`;
 }
 async function getLatestTag() {
-    try {
-        await exec.exec('git fetch --tags');
-        const result = await exec.getExecOutput(`git for-each-ref --sort=-v:refname --format '%(refname:lstrip=2)'`);
-        if (result.exitCode === 0) {
-            let raw = result.stdout.split('\n')[0].trim();
-            if (raw.startsWith("'"))
-                raw = raw.slice(1);
-            if (raw.endsWith("'"))
-                raw = raw.slice(0, -1);
-            return raw;
-        }
+    await exec.exec('git fetch --tags');
+    const result = await exec.getExecOutput(`git for-each-ref --sort=-v:refname --format '%(refname:lstrip=2)'`);
+    if (result.exitCode !== 0) {
+        throw new Error(`exitCode: ${result.exitCode}, err: ${result.stderr}`);
     }
-    catch (error) {
-        // ingored
-    }
-    return '';
+    let raw = result.stdout.split('\n')[0].trim();
+    if (!/v[0-9]+.[0-9]+.[0-9]+$/.test(raw))
+        return '';
+    if (raw.startsWith("'"))
+        raw = raw.slice(1);
+    if (raw.endsWith("'"))
+        raw = raw.slice(0, -1);
+    return raw;
 }
 
 
