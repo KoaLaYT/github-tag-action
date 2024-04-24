@@ -1,23 +1,14 @@
-name: 'Bump tag based on PR branch name / title'
-description: 'Bump tag based on PR branch name / title'
+name: 'Github Tag Bump'
+description: 'Bump tag version based on PR branch name / title on merge'
 author: 'KoaLaYT'
 
-# Add your action's branding here. This will appear on the GitHub Marketplace.
 branding:
-  icon: 'heart'
-  color: 'red'
+  icon: 'git-merge'
+  color: 'green'
 
-# Define your inputs here.
-# inputs:
-# milliseconds:
-#   description: 'Your input description here'
-#   required: true
-#   default: '1000'
-
-# Define your outputs here.
 outputs:
   new_tag:
-    description: 'new tag'
+    description: 'Generated tag'
 
 runs:
   using: node20
