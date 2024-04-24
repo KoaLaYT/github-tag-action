@@ -30477,9 +30477,6 @@ async function run() {
             newTag = bumpVersion({ tag: latestTag, branch: prBranch, body: prBody });
         }
         core.info(`Bump tag ${latestTag || '-'} to ${newTag}`);
-        // await exec.exec(
-        //   `git config --global --add safe.directory /github/workspace`
-        // )
         await exec.exec(`git tag -f "${newTag}"`);
         await exec.exec(`git push --tags`);
         // Set outputs for other workflow steps to use
