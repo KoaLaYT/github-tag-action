@@ -30468,7 +30468,7 @@ async function run() {
         const prBranch = payload.pull_request.head.ref;
         const prTitle = payload.pull_request.title;
         core.info(`PR branch is ${prBranch}`);
-        core.info(`PR body is ${prTitle}`);
+        core.info(`PR title  is ${prTitle}`);
         const latestTag = await getLatestTag();
         core.info(`Latest tag is ${latestTag}`);
         let newTag = '';

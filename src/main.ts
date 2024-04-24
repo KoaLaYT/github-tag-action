@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
 import * as exec from '@actions/exec'
-import { PullRequestEvent } from '@octokit/webhooks-definitions/schema'
+import type { PullRequestEvent } from '@octokit/webhooks-definitions/schema'
 
 /**
  * The main function for the action.
@@ -15,7 +15,7 @@ export async function run(): Promise<void> {
     const prBranch: string = payload.pull_request.head.ref
     const prTitle: string = payload.pull_request.title
     core.info(`PR branch is ${prBranch}`)
-    core.info(`PR body is ${prTitle}`)
+    core.info(`PR title  is ${prTitle}`)
 
     const latestTag = await getLatestTag()
     core.info(`Latest tag is ${latestTag}`)
