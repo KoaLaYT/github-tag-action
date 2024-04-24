@@ -30525,6 +30525,7 @@ async function getLatestTag() {
         }
     }
     catch (error) {
+        core.info(`err msg: , ${error.message}`);
         if (error instanceof Error &&
             error.message.includes('No names found, cannot describe anything')) {
             return '';

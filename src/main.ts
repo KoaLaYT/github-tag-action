@@ -89,6 +89,7 @@ async function getLatestTag() {
       return result.stdout
     }
   } catch (error) {
+    core.info(`err msg: , ${(error as any).message}`)
     if (
       error instanceof Error &&
       error.message.includes('No names found, cannot describe anything')
