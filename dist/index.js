@@ -30466,9 +30466,9 @@ async function run() {
         }
         const payload = github.context.payload;
         const prBranch = payload.pull_request.head.ref;
-        const prBody = payload.pull_request.body;
+        const prTitle = payload.pull_request.title;
         core.info(`PR branch is ${prBranch}`);
-        core.info(`PR body is ${prBody}`);
+        core.info(`PR body is ${prTitle}`);
         const latestTag = await getLatestTag();
         core.info(`Latest tag is ${latestTag}`);
         let newTag = '';
@@ -30476,7 +30476,7 @@ async function run() {
             newTag = 'v0.0.1';
         }
         else {
-            newTag = bumpVersion({ tag: latestTag, branch: prBranch, body: prBody });
+            newTag = bumpVersion({ tag: latestTag, branch: prBranch, title: prTitle });
         }
         core.info(`Bump tag ${latestTag || '-'} to ${newTag}`);
         await exec.exec(`git tag -f "${newTag}"`);
@@ -30497,11 +30497,11 @@ const bumpConfig = {
         patch: ['fix/', 'hotfix/', 'bugfix/']
     }
 };
-function bumpVersion({ tag, branch, body }) {
+function bumpVersion({ tag, branch, title }) {
     let [major, minor, patch] = tag.slice(1).split('.');
     do {
-        // body's #major take highest pirority
-        if (body.includes('#major')) {
+        // title's #major take highest pirority
+        if (title.includes('#major')) {
             major = `${Number(major) + 1}`;
             break;
         }
