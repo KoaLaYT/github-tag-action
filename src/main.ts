@@ -13,9 +13,9 @@ export async function run(): Promise<void> {
     }
     const payload = github.context.payload as PullRequestEvent
     const prBranch: string = payload.pull_request.head.ref
-    const prBody: string = payload.pull_request.body
+    const prTitle: string = payload.pull_request.title
     core.info(`PR branch is ${prBranch}`)
-    core.info(`PR body is ${prBody}`)
+    core.info(`PR body is ${prTitle}`)
 
     const latestTag = await getLatestTag()
     core.info(`Latest tag is ${latestTag}`)
@@ -24,7 +24,7 @@ export async function run(): Promise<void> {
     if (!latestTag) {
       newTag = 'v0.0.1'
     } else {
-      newTag = bumpVersion({ tag: latestTag, branch: prBranch, body: prBody })
+      newTag = bumpVersion({ tag: latestTag, branch: prBranch, title: prTitle })
     }
 
     core.info(`Bump tag ${latestTag || '-'} to ${newTag}`)
@@ -49,17 +49,17 @@ const bumpConfig = {
 function bumpVersion({
   tag,
   branch,
-  body
+  title
 }: {
   tag: string
   branch: string
-  body: string
+  title: string
 }): string {
   let [major, minor, patch] = tag.slice(1).split('.')
 
   do {
-    // body's #major take highest pirority
-    if (body.includes('#major')) {
+    // title's #major take highest pirority
+    if (title.includes('#major')) {
       major = `${Number(major) + 1}`
       break
     }
