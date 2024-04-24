@@ -26,7 +26,10 @@ export async function run(): Promise<void> {
       newTag = bumpVersion({ tag: latestTag, branch: prBranch, body: prBody })
     }
 
-    core.info(`Bump tag ${latestTag ?? '-'} to ${newTag}`)
+    core.info(`Bump tag ${latestTag || '-'} to ${newTag}`)
+
+    await exec.exec(`git tag -a "${newTag}" -m "${newTag} Release"`)
+    await exec.exec(`git push --tags`)
     // Set outputs for other workflow steps to use
     core.setOutput('new_tag', newTag)
   } catch (error) {
