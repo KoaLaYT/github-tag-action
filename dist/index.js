@@ -30467,7 +30467,7 @@ async function run() {
         const prBody = github.context.payload.pull_request?.body ?? '';
         core.info(`PR branch is ${prBranch}`);
         core.info(`PR body is ${prBody}`);
-        const latestTag = await exec.getExecOutput('git describe --tags "$(git rev-list --tags --max-count=1)"');
+        const latestTag = await getLatestTag();
         core.info(`Latest tag is ${JSON.stringify(latestTag)}`);
         // Set outputs for other workflow steps to use
         // core.setOutput('time', new Date().toTimeString())
@@ -30479,6 +30479,19 @@ async function run() {
     }
 }
 exports.run = run;
+async function getLatestTag() {
+    try {
+        const result = await exec.getExecOutput('git describe --tags "$(git rev-list --tags --max-count=1)"');
+        if (result.exitCode === 0) {
+            return result.stdout;
+        }
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            core.error(error.message);
+        }
+    }
+}
 
 
 /***/ }),

@@ -15,9 +15,7 @@ export async function run(): Promise<void> {
     core.info(`PR branch is ${prBranch}`)
     core.info(`PR body is ${prBody}`)
 
-    const latestTag = await exec.getExecOutput(
-      'git describe --tags "$(git rev-list --tags --max-count=1)"'
-    )
+    const latestTag = await getLatestTag()
     core.info(`Latest tag is ${JSON.stringify(latestTag)}`)
 
     // Set outputs for other workflow steps to use
@@ -25,5 +23,20 @@ export async function run(): Promise<void> {
   } catch (error) {
     // Fail the workflow run if an error occurs
     if (error instanceof Error) core.setFailed(error.message)
+  }
+}
+
+async function getLatestTag() {
+  try {
+    const result = await exec.getExecOutput(
+      'git describe --tags "$(git rev-list --tags --max-count=1)"'
+    )
+    if (result.exitCode === 0) {
+      return result.stdout
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      core.error(error.message)
+    }
   }
 }
