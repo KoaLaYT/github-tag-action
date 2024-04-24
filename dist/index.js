@@ -30529,12 +30529,10 @@ async function getLatestTag() {
         throw new Error(`exitCode: ${result.exitCode}, err: ${result.stderr}`);
     }
     let raw = result.stdout.split('\n')[0].trim();
-    core.info(`Find raw latest tag: ${raw}`);
     if (raw.startsWith("'"))
         raw = raw.slice(1);
     if (raw.endsWith("'"))
         raw = raw.slice(0, -1);
-    core.info(`Find raw latest tag: ${raw}`);
     if (!/^v[0-9]+.[0-9]+.[0-9]+$/.test(raw))
         return '';
     return raw;
