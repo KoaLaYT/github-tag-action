@@ -30477,6 +30477,9 @@ async function run() {
             newTag = bumpVersion({ tag: latestTag, branch: prBranch, body: prBody });
         }
         core.info(`Bump tag ${latestTag || '-'} to ${newTag}`);
+        const myToken = core.getInput('GITHUB_TOKEN');
+        const octokit = github.getOctokit(myToken);
+        await exec.exec(`git config --global --add safe.directory /github/workspace`);
         await exec.exec(`git tag -a "${newTag}" -m "${newTag} Release"`);
         await exec.exec(`git push --tags`);
         // Set outputs for other workflow steps to use
