@@ -30463,8 +30463,12 @@ const exec = __importStar(__nccwpck_require__(1514));
 async function run() {
     try {
         // const ms: string = core.getInput('milliseconds')
-        core.info(JSON.stringify(github.context));
-        exec.exec('git status');
+        const prBranch = github.context.payload.pull_request?.head?.ref ?? '';
+        const prBody = github.context.payload.pull_request?.body ?? '';
+        core.info(`PR branch is ${prBranch}`);
+        core.info(`PR body is ${prBody}`);
+        const latestTag = exec.getExecOutput('git describe --tags "$(git rev-list --tags --max-count=1)"');
+        core.info(`Latest tag is ${latestTag}`);
         // Set outputs for other workflow steps to use
         // core.setOutput('time', new Date().toTimeString())
     }
