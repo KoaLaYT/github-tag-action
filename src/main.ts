@@ -98,6 +98,8 @@ async function getLatestTag(): Promise<string> {
       if (raw.endsWith("'")) raw = raw.slice(0, -1)
       return raw
     }
-  } catch (error) {}
+  } catch (error) {
+    // ingored
+  }
   return ''
 }

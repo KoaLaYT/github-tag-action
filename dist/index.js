@@ -30534,7 +30534,9 @@ async function getLatestTag() {
             return raw;
         }
     }
-    catch (error) { }
+    catch (error) {
+        // ingored
+    }
     return '';
 }
 
