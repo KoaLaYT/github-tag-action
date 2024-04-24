@@ -30467,7 +30467,7 @@ async function run() {
         const prBody = github.context.payload.pull_request?.body ?? '';
         core.info(`PR branch is ${prBranch}`);
         core.info(`PR body is ${prBody}`);
-        core.info(`${JSON.stringify(github.context)}`);
+        core.info(`${JSON.stringify(github)}`);
         const latestTag = await getLatestTag();
         core.info(`Latest tag is ${latestTag}`);
         let newTag = '';
