@@ -17,7 +17,7 @@ export async function run(): Promise<void> {
     core.info(`PR body is ${prBody}`)
 
     const latestTag = await getLatestTag()
-    core.info(`Latest tag is ${JSON.stringify(latestTag)}`)
+    core.info(`Latest tag is ${latestTag}`)
 
     let newTag = ''
     if (!latestTag) {
@@ -93,7 +93,10 @@ async function getLatestTag(): Promise<string> {
       `git for-each-ref --sort=-v:refname --format '%(refname:lstrip=2)'`
     )
     if (result.exitCode === 0) {
-      return result.stdout.split('\n')[0]
+      let raw = result.stdout.split('\n')[0].trim()
+      if (raw.startsWith("'")) raw = raw.slice(1)
+      if (raw.endsWith("'")) raw = raw.slice(0, -1)
+      return raw
     }
   } catch (error) {}
   return ''
