@@ -30461,8 +30461,12 @@ const exec = __importStar(__nccwpck_require__(1514));
  */
 async function run() {
     try {
-        const prBranch = github.context.payload.pull_request?.head?.ref ?? '';
-        const prBody = github.context.payload.pull_request?.body ?? '';
+        if (github.context.eventName !== 'pull_request') {
+            throw new Error(`This action can only be used in pull_request event`);
+        }
+        const payload = github.context.payload;
+        const prBranch = payload.pull_request.head.ref;
+        const prBody = payload.pull_request.body;
         core.info(`PR branch is ${prBranch}`);
         core.info(`PR body is ${prBody}`);
         const latestTag = await getLatestTag();

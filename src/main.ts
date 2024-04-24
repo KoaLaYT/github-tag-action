@@ -1,15 +1,19 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
 import * as exec from '@actions/exec'
+import { PullRequestEvent } from '@octokit/webhooks-definitions/schema'
 
 /**
  * The main function for the action.
  */
 export async function run(): Promise<void> {
   try {
-    const prBranch: string =
-      github.context.payload.pull_request?.head?.ref ?? ''
-    const prBody: string = github.context.payload.pull_request?.body ?? ''
+    if (github.context.eventName !== 'pull_request') {
+      throw new Error(`This action can only be used in pull_request event`)
+    }
+    const payload = github.context.payload as PullRequestEvent
+    const prBranch: string = payload.pull_request.head.ref
+    const prBody: string = payload.pull_request.body
     core.info(`PR branch is ${prBranch}`)
     core.info(`PR body is ${prBody}`)
 
