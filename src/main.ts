@@ -90,10 +90,10 @@ async function getLatestTag(): Promise<string> {
   try {
     await exec.exec('git fetch --tags')
     const result = await exec.getExecOutput(
-      'git describe --tags "$(git rev-list --tags --max-count=1)"'
+      `git for-each-ref --sort=-v:refname --format '%(refname:lstrip=2)'`
     )
     if (result.exitCode === 0) {
-      return result.stdout
+      return result.stdout.split('\n')[0]
     }
   } catch (error) {}
   return ''
