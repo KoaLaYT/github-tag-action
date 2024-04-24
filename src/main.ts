@@ -15,6 +15,7 @@ export async function run(): Promise<void> {
     const prBody: string = github.context.payload.pull_request?.body ?? ''
     core.info(`PR branch is ${prBranch}`)
     core.info(`PR body is ${prBody}`)
+    core.info(`${JSON.stringify(github.context)}`)
 
     const latestTag = await getLatestTag()
     core.info(`Latest tag is ${latestTag}`)
@@ -96,10 +97,11 @@ async function getLatestTag(): Promise<string> {
   }
 
   let raw = result.stdout.split('\n')[0].trim()
-
-  if (!/v[0-9]+.[0-9]+.[0-9]+$/.test(raw)) return ''
-
+  core.info(`Find raw latest tag: ${raw}`)
   if (raw.startsWith("'")) raw = raw.slice(1)
   if (raw.endsWith("'")) raw = raw.slice(0, -1)
+  core.info(`Find raw latest tag: ${raw}`)
+
+  if (!/^v[0-9]+.[0-9]+.[0-9]+$/.test(raw)) return ''
   return raw
 }
