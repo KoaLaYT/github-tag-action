@@ -4,18 +4,14 @@ import * as exec from '@actions/exec'
 
 /**
  * The main function for the action.
- * @returns {Promise<void>} Resolves when the action is complete.
  */
 export async function run(): Promise<void> {
   try {
-    // const ms: string = core.getInput('milliseconds')
-
     const prBranch: string =
       github.context.payload.pull_request?.head?.ref ?? ''
     const prBody: string = github.context.payload.pull_request?.body ?? ''
     core.info(`PR branch is ${prBranch}`)
     core.info(`PR body is ${prBody}`)
-    core.info(`${JSON.stringify(github)}`)
 
     const latestTag = await getLatestTag()
     core.info(`Latest tag is ${latestTag}`)

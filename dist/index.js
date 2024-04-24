@@ -30458,16 +30458,13 @@ const github = __importStar(__nccwpck_require__(5438));
 const exec = __importStar(__nccwpck_require__(1514));
 /**
  * The main function for the action.
- * @returns {Promise<void>} Resolves when the action is complete.
  */
 async function run() {
     try {
-        // const ms: string = core.getInput('milliseconds')
         const prBranch = github.context.payload.pull_request?.head?.ref ?? '';
         const prBody = github.context.payload.pull_request?.body ?? '';
         core.info(`PR branch is ${prBranch}`);
         core.info(`PR body is ${prBody}`);
-        core.info(`${JSON.stringify(github)}`);
         const latestTag = await getLatestTag();
         core.info(`Latest tag is ${latestTag}`);
         let newTag = '';
