@@ -1,5 +1,8 @@
 # github-tag-action
 
+[![MIT License](https://img.shields.io/github/license/KoaLaYT/github-tag-action)](https://github.com/KoaLaYT/github-tag-action/blob/main/LICENSE)
+[![GitHub Release](https://img.shields.io/github/v/release/KoaLaYT/github-tag-action)](https://github.com/KoaLaYT/github-tag-action/releases/latest)
+
 A GitHub Action to automatically bump and tag master, on merge, with the latest
 SemVer formatted version.
 
