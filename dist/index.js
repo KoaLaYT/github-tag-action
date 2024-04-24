@@ -30519,18 +30519,14 @@ function bumpVersion({ tag, branch, body }) {
 }
 async function getLatestTag() {
     try {
+        await exec.exec('git fetch --tags');
         const result = await exec.getExecOutput('git describe --tags "$(git rev-list --tags --max-count=1)"');
         if (result.exitCode === 0) {
             return result.stdout;
         }
     }
     catch (error) {
-        core.info(`err msg: , ${error.message}`);
-        if (error instanceof Error &&
-            error.message.includes('No names found, cannot describe anything')) {
-            return '';
-        }
-        throw error;
+        return '';
     }
 }
 
