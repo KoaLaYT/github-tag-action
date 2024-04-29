@@ -30503,11 +30503,14 @@ function bumpVersion({ tag, branch, title }) {
         // title's #major take highest pirority
         if (title.includes('#major')) {
             major = `${Number(major) + 1}`;
+            minor = `0`;
+            patch = `0`;
             break;
         }
         // branch likes feat/xxx etc...
         if (bumpConfig.branch.minor.some(it => branch.startsWith(it))) {
             minor = `${Number(minor) + 1}`;
+            patch = `0`;
             break;
         }
         // branch likes fix/xxx etc...
